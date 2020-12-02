@@ -4,9 +4,9 @@ Qtr, the quote management bot!
 # What is Qtr?
 Qtr is a quote management bot that will assist with your quoting needs. This bot provides a way to keep track of statistics, such as the current quote count, the highest ranked quote and all of the people who have been quoted in the server.
 
-When formatting the message, Qtr will recognise quotes that are formatted in a `"[Quote]" - [Name]` form.
+When formatting the message, Qtr will recognise quotes that are formatted in a ```"[Quote]" - [Name]``` form.
 
-To configure Qtr to your specific quotes channel, please run the `.qtrSetup` command in the channel of your choice, which will create the necessary connections and pins to allow the bot to work away! (This requires administrator permissions)
+To configure Qtr to your specific quotes channel, please run the ```.qtrSetup``` command in the channel of your choice, which will create the necessary connections and pins to allow the bot to work away! (This requires administrator permissions)
 
 If there are any problems with Qtr, let me know! Please file an issue and I will try to solve it right away!
 
