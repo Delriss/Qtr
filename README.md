@@ -14,10 +14,10 @@ If there are any problems with Qtr, let me know! Please file an issue and I will
 Qtr has a few features to improve management and viewing of your quotes channel. Some of these features are work-in-progress and will be updated in the future.
 
 
-## Quote Counting
+### Quote Counting
 The main feature of Qtr is the counting function. This links your quotes channel to the database and records each time a quote is made by a particular user.This counter will link to a pinned message in your channel, showing you all the statistics you need to keep track of your counting and motivate your server to quote, quote, quote!
 
-## Quote Leaderboard
+### Quote Leaderboard
 This feature is W.I.P and is not yet developed. This feature will aim to list the top quotes by users, using other user's reaction as a ranking system. This will promote viewing of the quotes channel and kind reactions!
 
 # FAQ
