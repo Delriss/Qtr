@@ -1,6 +1,8 @@
 # Qtr
 Qtr, the quote management bot!
 
+Add the bot here: https://discord.com/api/oauth2/authorize?client_id=780577096858337290&permissions=93248&scope=bot
+
 # What is Qtr?
 Qtr is a quote management bot that will assist with your quoting needs. This bot provides a way to keep track of statistics, such as the current quote count, the highest ranked quote and all of the people who have been quoted in the server.
 
