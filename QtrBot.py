@@ -250,57 +250,74 @@ async def on_message(message):
 # Reaction Added
 @bot.event
 async def on_reaction_add(reaction, user):
-    print("Yes")
     if reaction.count < 2: ## Is < 2 for testing, will be > 5 as a limit
-        try:
-            sqliteConnection = sqlite3.connect(db_file)
-            sqlCursor = sqliteConnection.cursor()
-            print("\nDatabase Connection Success")
-            
-            #INSERT STATEMENT
-            sql_Upsert_Quote = """INSERT INTO tblLeaderboard(Guild_ID, Channel_ID, Message_ID, Reactions) 
-                                VALUES (?,?,?,?)
-                                ON CONFLICT(Guild_ID, Message_ID)
-                                DO UPDATE SET Reactions = Reactions+1
-                                """
-            
-            import_variables = (reaction.message.guild.id, reaction.message.channel.id, reaction.message.id, reaction.count)
-            sqlCursor.execute(sql_Upsert_Quote, import_variables)
-            sqliteConnection.commit()
-            print("Reaction Inserted/Updated")
-            
-            #SELECT STATEMENTS
-            sql_Select_Reactions = """SELECT Message_ID, Reactions FROM tblLeaderboard WHERE Guild_ID = ? ORDER BY Reactions DESC LIMIT 20"""
-            sqlCursor.execute(sql_Select_Reactions, (reaction.message.guild.id,))
-            records = sqlCursor.fetchall()
-            
-            ##Grab CounterMessage_ID
-            sql_Select_LeaderboardMessage_ID = """SELECT LeaderMessage_ID FROM tblMessageIDs WHERE Channel_ID = ?"""
-            sqlCursor.execute(sql_Select_LeaderboardMessage_ID, (reaction.message.channel.id,))
-            LeaderboardMessage = sqlCursor.fetchone()
-            
-            embedMessage = await (reaction.message.channel).fetch_message(LeaderboardMessage[0])
-            embed = embedMessage.embeds[0]
-            embed.clear_fields()
-            
-            iCounter = 1
-            for rows in records:
-                fieldMessage = await (reaction.message.channel).fetch_message(rows[0])                     
-                fieldName = str(iCounter)+ ") " + fieldMessage.content
-                embed.add_field(name=fieldName, value=rows[1], inline=False)
-                iCounter += 1
-            
-            await embedMessage.edit(embed=embed)
-            
-            sqlCursor.close()
-            sqliteConnection.close()
-            
-        except sqlite3.Error as e: #Catch Error in Inputting
-            print("Failed to insert information into SQL table - On_Reaction. Error:", e)
-        finally:
-            if (sqliteConnection):
+        
+        sqliteConnection = sqlite3.connect(db_file)
+        sqlCursor = sqliteConnection.cursor()
+        print("\nDatabase Connection Success")
+        
+        #SELECT STATEMENTS
+        sql_Select_tblGuild = """SELECT Channel_ID FROM tblGuilds WHERE Guild_ID = ?"""
+        
+        sqlCursor.execute(sql_Select_tblGuild, (reaction.message.guild.id,))
+        records = sqlCursor.fetchone()
+        reactionChannel = (records[0])
+        
+        sqlCursor.close()
+        sqliteConnection.close()
+        print("Database Connection Ended") 
+        
+        if reaction.message.channel.id == reactionChannel:
+            print("Reaction Matches")
+            try:
+                sqliteConnection = sqlite3.connect(db_file)
+                sqlCursor = sqliteConnection.cursor()
+                print("\nDatabase Connection Success")
+                
+                #INSERT STATEMENT
+                sql_Upsert_Quote = """INSERT INTO tblLeaderboard(Guild_ID, Channel_ID, Message_ID, Reactions) 
+                                    VALUES (?,?,?,?)
+                                    ON CONFLICT(Guild_ID, Message_ID)
+                                    DO UPDATE SET Reactions = Reactions+1
+                                    """
+                
+                import_variables = (reaction.message.guild.id, reaction.message.channel.id, reaction.message.id, reaction.count)
+                sqlCursor.execute(sql_Upsert_Quote, import_variables)
+                sqliteConnection.commit()
+                print("Reaction Inserted/Updated")
+                
+                #SELECT STATEMENTS
+                sql_Select_Reactions = """SELECT Message_ID, Reactions FROM tblLeaderboard WHERE Guild_ID = ? ORDER BY Reactions DESC LIMIT 20"""
+                sqlCursor.execute(sql_Select_Reactions, (reaction.message.guild.id,))
+                records = sqlCursor.fetchall()
+                
+                ##Grab CounterMessage_ID
+                sql_Select_LeaderboardMessage_ID = """SELECT LeaderMessage_ID FROM tblMessageIDs WHERE Channel_ID = ?"""
+                sqlCursor.execute(sql_Select_LeaderboardMessage_ID, (reaction.message.channel.id,))
+                LeaderboardMessage = sqlCursor.fetchone()
+                
+                embedMessage = await (reaction.message.channel).fetch_message(LeaderboardMessage[0])
+                embed = embedMessage.embeds[0]
+                embed.clear_fields()
+                
+                iCounter = 1
+                for rows in records:
+                    fieldMessage = await (reaction.message.channel).fetch_message(rows[0])                     
+                    fieldName = str(iCounter)+ ") " + fieldMessage.content
+                    embed.add_field(name=fieldName, value=rows[1], inline=False)
+                    iCounter += 1
+                
+                await embedMessage.edit(embed=embed)
+                
+                sqlCursor.close()
                 sqliteConnection.close()
-                print("Database Connection Ended")
+                
+            except sqlite3.Error as e: #Catch Error in Inputting
+                print("Failed to insert information into SQL table - On_Reaction. Error:", e)
+            finally:
+                if (sqliteConnection):
+                    sqliteConnection.close()
+                    print("Database Connection Ended")
                 
         
     
