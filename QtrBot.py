@@ -19,6 +19,23 @@ async def on_ready():
     print("-- Qtr Ready! --\n\n")
     
 # -------------------------------------------------------------------------------------------
+# Help Command
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(
+        colour = discord.Colour.purple()
+    )
+
+    embed.set_author(name='Help')
+    embed.add_field(name='Bot Prefix: .qtr', value='Used before all commands. Commands are not case sensitive.', inline=False)
+    embed.add_field(name='.qtrPing', value='Returns Pong! and bot latency.', inline=False)
+    embed.add_field(name='.qtrSetup', value="Begins setup for Qtr in respective channel. [ADMIN]", inline=False)
+    embed.add_field(name='.qtrReset', value='Begins the reset for Qtr, removing all server information. [ADMIN]', inline=False)
+    embed.add_field(name='Documentation:', value="https://github.com/Delriss/Qtr (W.I.P)", inline=False)
+
+    await ctx.author.send(embed=embed)
+    
+# -------------------------------------------------------------------------------------------
 # Ping for latency
 @bot.command()
 async def ping(ctx):
@@ -28,7 +45,7 @@ async def ping(ctx):
 # On Join - Setup
 @bot.event
 async def on_guild_join(guild):
-    await guild.text_channels[0].send("***Welcome to Qtr!*** \n\n> This bot will manage all of your quoting needs, but first a setup is required. Please enter the `.qtrSetup` command in your chosen quotes channel to continue the setup.")
+    await guild.text_channels[0].send("***Welcome to Qtr!*** \n\n> This bot will manage all of your quoting needs, but first a setup is required. Please enter the `.qtrSetup` command in your chosen quotes channel to continue the setup.\nFor more information use '.qtrHelp'.")
 
 # -------------------------------------------------------------------------------------------
 # Setup Command
@@ -98,7 +115,7 @@ async def agree(ctx):
             
         #Setup Leaderboard Embed
         embed=discord.Embed(title="Quote Leaderboard", description="A leaderboard for the most liked quotes!", color=0x0000ff)
-        embed.set_author(name="Qtr - Counter")
+        embed.set_author(name="Qtr - Leaderboard")
         embed.set_footer(text="QTR - Quote Leaderboard")
         leaderboardmessage = await ctx.send(embed=embed)
         await leaderboardmessage.pin(reason = "Qtr Quote Leaderboard")
