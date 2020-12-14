@@ -267,7 +267,7 @@ async def on_message(message):
 # Reaction Added
 @bot.event
 async def on_reaction_add(reaction, user):
-    if reaction.count < 2: ## Is < 2 for testing, will be > 5 as a limit
+    if reaction.count > 3:
         
         sqliteConnection = sqlite3.connect(db_file)
         sqlCursor = sqliteConnection.cursor()
