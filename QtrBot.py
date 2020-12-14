@@ -267,7 +267,8 @@ async def on_message(message):
 # Reaction Added
 @bot.event
 async def on_reaction_add(reaction, user):
-    if reaction.count > 3:
+    print(reaction.count)
+    if reaction.count >= 3:
         
         sqliteConnection = sqlite3.connect(db_file)
         sqlCursor = sqliteConnection.cursor()
