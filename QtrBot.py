@@ -213,6 +213,10 @@ async def on_message(message):
                     quoteRegex = re.search(r'"(.*)"\s*-\s*(.*)', message.content) # Makes sure message = "Quote" - Name
                     if quoteRegex:
                         quoteName = quoteRegex.group(2) #Grabs name
+                        mentionRegex = re.search(r'<@(!?)([0-9]*)>', message.content)
+                        if mentionRegex:
+                            for mention in message.mentions:
+                                quoteName = mention.name
                         #Format Name
                         quoteName = quoteName.lower() # Lower Case
                         quoteName = quoteName.capitalize() # Capatilise
@@ -267,7 +271,6 @@ async def on_message(message):
 # Reaction Added
 @bot.event
 async def on_reaction_add(reaction, user):
-    print(reaction.count)
     if reaction.count >= 3:
         
         sqliteConnection = sqlite3.connect(db_file)
